@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link href="./static/css/customstyles.css"  rel="stylesheet" type="text/css">
+    <link href="./static/css/bootstrap.min.css"  rel="stylesheet" type="text/css">
+    
+    
+    <link href="./static/icons/font/bootstrap-icons.min.css"  rel="stylesheet" type="text/css">
+
+    <style>
+        .date-picker{
+            position: relative;
+            width: 25%;
+            color: #289;
+            padding: 1rem;
+            margin: 3rem;
+            background-color: beige;
+            cursor: pointer;
+        }
+    
+    </style>
+    
+</head>
+<body>
+
+
+    <div class="date-picker"  id="one">
+        <input type="text" value="date" id="date-input" />         
+      </div>
+  
+      <div class="date-picker"   >
+        <input type="text" value="date"  id="date-input2"/>        
+      </div>
+    
+
+    <script src="./script.js" ></script>
+    <script>
+        function getSelectDate(param){
+        console.log('Picker Output', param);
+      }
+      var dateInput1 = new calendarPicker({"defaultCalendar": "ET", "selector": "date-input", "showDatePicker": true, "dateFormat": "dd-mm-yyyy",'onChangeCallback':getSelectDate});
+      dateInput1.init();
+      var dateInput2 = new calendarPicker({"defaultCalendar": "ET", 
+                                           "selector": "date-input2", 
+                                           "showDatePicker": true, 
+                                           "dateFormat": "dd-mm-yyyy",
+                                           'onChangeCallback':getSelectDate, 
+                                           "selectedDate": {year: 2016, month: 2, day: 30},
+                                           "minDate": {year: 2010, month: 12, day: 30},
+                                           "maxDate": {year: 2021, month: 3, day: 15}
+                                          });
+      dateInput2.init();
+    </script>
+</body>
+</html>

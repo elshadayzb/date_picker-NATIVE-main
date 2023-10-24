@@ -1,0 +1,467 @@
+.calendarPicakerMain
+{
+    right: -5%;
+    z-index: 15;
+    min-height:280px;
+    min-width:280px;
+    max-height:280px;
+    max-width:280px;
+    background-color: #f5f5f5;   
+}
+
+.bi
+{
+    font-weight: 600;
+}
+
+.month-of-year:hover
+{
+    background-color: #d22525;
+    color: aquamarine;
+}
+
+.bi:hover
+{
+    background-color: hsl(214, 82%, 51%);
+    color: #ffffff;
+    border-radius: 50%;
+    padding: 0.1em 0.3em;
+}
+.day-of-month:hover
+{
+    background-color: #b7b7b7;
+    color: #fff;
+}
+
+
+/* Z indices */
+
+.z-10 {
+    z-index: 10;
+  }
+  .z-1100 {
+    z-index: 1100;
+  }
+  
+  /*  Font Resources */
+  
+  
+  /* Font Sizings  Styles */
+  .f-01 {
+    font-size: 0.1em;
+  }
+  .f-017{
+    font-size: 0.17em;
+  }
+  .f-02 {
+    font-size: 0.2em;
+  }
+  .f-03 {
+    font-size: 0.3em;
+  }
+  .f-04p5 {
+    font-size: 0.45em;
+  }
+  .f-04 {
+    font-size: 0.4em;
+  }
+  .f-05 {
+    font-size: 0.5em;
+  }
+  
+  .f-06 {
+    font-size: 0.6em;
+  }
+  .f-07 {
+    font-size: 0.7em;
+  }
+  .f-08 {
+    font-size: 0.8em;
+  }
+  .f-09 {
+    font-size: 0.9em;
+  }
+  .f-1 {
+    font-size: 1em;
+  }
+  
+  .f-1p3 {
+    font-size: 1.3em;
+  }
+  
+  .f-1p6 {
+    font-size: 1.6em;
+  }
+  
+  .f-2 {
+    font-size: 2em;
+  }
+  
+  .f-3 {
+    font-size: 3em;
+  }
+  
+  .f-4 {
+    font-size: 4em;
+  }
+  
+  .f-4p5 {
+    font-size: 4.5em;
+  }
+  
+  .f-6p6
+  {
+    font-size: 6.6em;
+  }
+  
+  .f-inherit
+  {
+    font-size: inherit;
+  }
+  
+  /* Margins */
+  .mx-0p3em{margin: 0em 0.4em  }
+  .m-0p20p9{margin: 0.4em 0.8em }
+  .mt-1em{margin-top: 1em;}
+  .mb-0p5em{margin-top: 0.5em;}
+  
+  
+  
+  /*
+    * Padding 
+  */
+  .p-0p3
+  {
+    padding: 0em 0.3em;
+  }
+  
+  .p-0p2
+  {
+    padding: 0em 0.2em;
+  }
+  
+  .p-0p2v
+  {
+    padding: 0.2em 0em;
+  }
+  
+  .p-0p1
+  {
+    padding: 0.1em 0.0em;
+  }
+  
+  
+  .p-t0p2per
+  {
+    padding-top: 0.2%;  
+  }
+  
+  .p-v0p3
+  {
+    padding: 0.3em 0em;
+  }
+  
+  
+  .p-b15per
+  {
+    padding: 0em 0em 0.15% 0em;
+  }
+  
+  /* borders*/
+  
+  .border-0p05
+  {
+    border-radius: 0.4em;
+    border: 0.05em solid #2c2c2c;
+    box-shadow: 0.05em 0.05em 0.2em 0em rgba(72, 70, 70, 0.63);
+  }
+  
+  
+  /*component specific padding */
+  
+  .calendarDay-buttonP1
+  {padding: 0.2em 0.42em;}
+  .calendarDay-buttonP2
+  {padding: 0.2em 0.68em;}
+  
+  
+  
+  /* Sizing Styles  */ 
+  
+  /* WIDTH  */
+  
+  .w-840px{width: 840px;}
+  .w-11em {width: 11em;}
+  .w-13em {width: 13em;}
+  
+  .w-20per{width: 20%;}
+  .w-30per{width: 30%;}
+  .w-80per{width: 80%;}
+  .w-85per{width: 85%;}
+  .w-95per{width: 95%;}
+  .w-99p6per{width: 99.6%;}
+  .w-28ch{width: 24ch;}
+  .w-20ch{width: 19ch;}
+  .w-15ch{width: 12ch; }
+  
+  .w-8em{width: 8em !important;}
+  
+  /* Min Width */
+  
+  .mw-2rem{min-width: 2rem;}
+  
+  
+  /* HEIGHT */
+  .h-0per{height: 0px;}
+  .h-5per{height: 5%;}
+  .h-10per{height: 10%;}
+  .h-12per{height: 12%;}
+  .h-13p5per{height: 13.5%;}
+  .h-16p667per{height: 18.667%;}
+  .h-89p1vh{height: 89.1vh;}
+  .h-80p2vh{height: 80.2vh;}
+  .h-9p5{height: 9.5rem;}
+  .h-12{height: 12rem;}
+  .h-6p6{height: 6.6em;}
+  .h-4p6{height: 4.6em;}
+  .h-13{height: 13em;}
+  .h-13rem{height: 13rem;}
+  
+  
+  /* Positioning Styles */
+  .t-2p2em{top: 2.2em;}
+  .t-10per{top: 10%;}
+  
+  
+  
+  
+  
+  
+  .l-0em{left: 0em;}
+  .l-40per{left: 40%;}
+  
+  
+  
+  .r-0em{right: 0em;}
+  
+  
+  /* component styling  */
+  
+  .headerTitle
+  {
+    margin:0em 3ch;
+    text-align:center;
+  }
+  
+  .createEvent-btn
+  {
+    margin-top:0.5em;
+    outline:none;
+    border: 0.05em solid #ccc;
+    padding:0.4em;
+    border-radius:0.3em;
+    background-color: white;
+   /*  box-shadow: 0.05em 0.05em 0.2em 0em rgba(72, 70, 70, 0.15); */
+    }
+  
+  .createEvent-btn-shadow{
+    box-shadow: 0.05em 0.05em 0.2em 0em rgba(187, 185, 185, 0.65);
+  }
+  
+  .createEvent-optionsCont
+  {
+    width: 100%;
+    left: 10%;
+    top:101%;
+    box-shadow: 0.2em 0.1em 0.5em 0em rgba(0,0,0,0.63);
+  }
+  
+  .sideEvents-container
+  {
+    width: 100%;
+    padding:0.4em  0.5em 0.1em; 
+    overflow-y: "scroll";
+  }
+  
+  .calendarDay-button
+  {
+    font-size: inherit;
+    font-family:  inherit;
+    font-weight: inherit;
+    text-transform: none;
+    border-radius: 50%;
+    border: none;
+    text-align: center;
+  }
+  
+  
+  .calendarview-Header
+  {
+    position: sticky;
+    top: 0px;
+    left: 0px;
+    z-index: 10;
+  }
+  .eventView-style{
+    font-size: 0.6em;
+    cursor: pointer;
+    z-index: 4;
+    text-align : center;
+    overflow : hidden;
+    flex-wrap: nowrap;
+    border-top: 1px solid #fff;
+    border-left: 1px solid #fff;
+  
+  }
+  .eventView-cancelbtn
+  {
+    border-radius:80%;
+    font-size:1em;
+   }
+  
+   .eventView-dateText
+   {
+    font-size: 0.6em;
+    font-weight: 600;
+    margin-left: 4rem;
+   }
+  
+   .eventView-icons
+   {
+    border-radius: 0.3rem;
+    margin: 0.2em 0.5em;
+    font-size: 1.3em;
+   }
+  
+   .eventView-iconsText
+   {
+    font-size: 0.6em;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+   }
+  
+   .modal
+   {
+    width: 80%;
+    left: 40%;
+    top: 10%;
+   }
+  
+   .calendarMonthly-plusBtn
+   {
+    position:absolute;
+    bottom:0.7em;
+    width:100%;
+    align-self:center;
+    z-index: 6;
+   }
+  
+   .calendarSchedule-plusBtn
+   {
+    position:absolute;
+    bottom:0.0em;
+    width:100%;
+    align-self:center;
+    z-index: 6;
+   }
+  
+   .calendarMonthly-plusBtnIcon
+   {
+    color:black;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius:1em;
+    background-color:white;
+    width: 1.4em;
+    height: 1.3em;
+    font-size:1.3em;
+   }
+  
+   .sideNav-cancelBtn
+   {
+    color:#333;
+    border-radius:2.5em;
+    padding:0em 0.2em;
+    font-size:1.1em;
+    width: 1.5em;
+    height: 1.5em;
+    cursor: pointer;
+   }
+  
+  .spanningEvents-showMoreBtn
+   {
+    
+    z-index: 6;
+   }
+  
+  .spanningEvents-showMoreBtnIcon
+   {
+    color:#4c4f51d9;
+    padding: 0em 0.3em;
+    font-size:1.1em;
+   
+  }
+  
+  .pointer {
+    cursor: pointer;
+  }
+  
+  .btn-today
+  {
+    outline: none;
+    border: 1.8px solid rgb(112, 111, 111);
+    border-radius: 10px;
+    height: 90%;
+    font-size: 1.5em;
+    font-weight: 500;
+    text-align: center;
+  }
+  
+  
+  .nav-btn-active
+  {
+    border-bottom-right-radius: 6em;
+    border-top-right-radius: 6em;
+  }
+  
+  .header-nav-btn
+  {
+    color:rgb(96, 96, 96);
+    border-radius:2px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size:1.8em;
+    cursor: pointer;
+  }
+  
+  .nav-modal
+  {
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    right: 0%;
+    bottom: 0%;
+    background-color: rgba(0,0,0, 0.2);
+    height: 100vh;
+    z-index: 50;
+  }
+  
+  .sideNav{
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    height: 100vh;
+    width: 50vw;
+    display : flex;
+    z-index: 50;
+  }
+  .d-flex-ek{
+    display: flex;
+  
+  }
+  .z-1 {
+    z-index: 1;
+  }
