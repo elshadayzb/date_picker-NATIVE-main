@@ -324,9 +324,10 @@ function calendarPicker(settings){
     this.onChangeCallback = this.settings.onChangeCallback;
 
     const initialCalendarState = defaultCalendar === "ET" ? false: true;
+    const today = getToday(initialCalendarState); //gets today for the selected calendar
     const curDate = this.settings["selectedDate"] ? 
                         {...this.settings["selectedDate"], month: this.settings["selectedDate"].month - 1} : 
-                        getToday(initialCalendarState)
+                        today; // gets the selectedDate
 
     this.setState = (index,value)=>{
         this.state[index] = value;
@@ -339,25 +340,26 @@ function calendarPicker(settings){
         this.setState("isGregorian", !this.state.isGregorian);
         
         if(initialCalendarState === this.state.isGregorian){
-            console.log("Initial Calendar State: ", initialCalendarState, " isGregorian: ", this.state.isGregorian, " selectedDate: ", this.settings["selectedDate"])
-            console.log("Current Date: ", curDate);
-            this.setState("today", curDate);
+            console.log("Initial Calendar State: ", initialCalendarState, 
+                        " isGregorian: ", this.state.isGregorian, " selectedDate: ", this.settings["selectedDate"], " \nCurrent Date: ", curDate);
+            this.setState("selectedDate", curDate);
         }else if(!this.settings["selectedDate"]){
-            this.setState("today", getToday(this.state.isGregorian));
+            this.setState("selectedDate", getToday(this.state.isGregorian));        
         }else{
             let convertedDate;
             if(initialCalendarState){
-                convertedDate = calendarConverter.convertToEC(this.state.today.year, this.state.today.month + 1, this.state.today.day);
-                this.setState("today", {...convertedDate, month: convertedDate.month - 1});
+                convertedDate = calendarConverter.convertToEC(this.state.selectedDate.year, this.state.selectedDate.month + 1, this.state.selectedDate.day);
+                this.setState("selectedDate", {...convertedDate, month: convertedDate.month - 1});
             }else{
-                convertedDate = calendarConverter.convertToGC(this.state.today.year, this.state.today.month + 1, this.state.today.day);
-                this.setState("today", {...convertedDate, month: convertedDate.month - 1});
+                convertedDate = calendarConverter.convertToGC(this.state.selectedDate.year, this.state.selectedDate.month + 1, this.state.selectedDate.day);
+                this.setState("selectedDate", {...convertedDate, month: convertedDate.month - 1});
             }
         }
         
-        //this.setState("today" , getToday(this.state.isGregorian));
-        this.setState("monthIndex" , this.state.today.month);
-        this.setState("yearIndex" , this.state.today.year);
+        //this.setState("selectedDate" , getToday(this.state.isGregorian));
+        this.setState("today", getToday(this.state.isGregorian));
+        this.setState("monthIndex" , this.state.selectedDate.month);
+        this.setState("yearIndex" , this.state.selectedDate.year);
         this.setState("years" , getYears(this.state.yearIndex));
         this.setState("texts" , this.state.isGregorian ? TEXTS[0] : TEXTS[1]);
         
@@ -393,9 +395,9 @@ function calendarPicker(settings){
         this.renderPicker();
         
     }
+
     this.nextMonthHandler = () => {
 
-      
         if(this.state.visiblePicker === "MONTH"){
             this.setState("yearIndex",this.state.yearIndex + 1 );
         }else if (this.state.visiblePicker === "YEAR"){
@@ -415,9 +417,6 @@ function calendarPicker(settings){
             }
         }
 
-
-
-        
         this.setState("monthDays", this.state.isGregorian ? 
                                         getMonthDaysGreg(this.state.monthIndex, this.state.yearIndex) : 
                                         getMonthDaysEthiopic(this.state.monthIndex, this.state.yearIndex));
@@ -426,11 +425,13 @@ function calendarPicker(settings){
         
         this.renderPicker();
     }
+
     this.destroy = () => {
         this.setState("showPicker", false);
         this.renderPicker();
 
     }
+
     this.onDateSelected = (day) => {
 
         const gregorianDate = this.state.isGregorian ? 
@@ -452,6 +453,7 @@ function calendarPicker(settings){
         }) 
         this.destroy();
     }
+
     this.onMonthSelected = (month) => {
         this.setState("monthIndex",month);
         this.setState("visiblePicker","DATE");
@@ -460,13 +462,24 @@ function calendarPicker(settings){
         getMonthDaysEthiopic(this.state.monthIndex, this.state.yearIndex));
         this.renderPicker();
     }
+
     this.onYearSelected = (year) => {
         this.setState("yearIndex",year);
         this.setState("visiblePicker","MONTH");
         this.renderPicker();
     }
 
-
+    this.onTodaySelected = () => {
+        this.setState("monthIndex" , this.state.today.month);
+        this.setState("yearIndex" , this.state.today.year);
+        this.setState("years" , getYears(this.state.today.year));
+        
+        this.setState("monthDays", this.state.isGregorian ? 
+                    getMonthDaysGreg(this.state.today.month, this.state.today.year) : 
+                    getMonthDaysEthiopic(this.state.today.month, this.state.today.year));
+    
+        this.renderPicker();
+    }
 
     this.renderPicker = () =>{
        
@@ -478,7 +491,7 @@ function calendarPicker(settings){
         }else if(this.state.visiblePicker === "YEAR"){
             pickerComponent = yearPicker(this.state.years);
         }else {
-            pickerComponent = datePicker(this.state.monthIndex, this.state.monthDays, this.state.today, this.state.texts["weekdays"]);
+            pickerComponent = datePicker(this.state.monthIndex, this.state.monthDays, this.state.selectedDate, this.state.today, this.state.texts["weekdays"]);
         }
           
 
@@ -488,7 +501,7 @@ function calendarPicker(settings){
 
 
         const pickerDiv = document.createElement('div');
-        pickerDiv.innerHTML = pickerContainer(pickerComponent,this.state.visiblePicker,this.state.yearIndex,this.state.texts["months"][this.state.monthIndex],this.state.isGregorian,this.state.showPicker);
+        pickerDiv.innerHTML = pickerContainer(pickerComponent, this.state.visiblePicker, this.state.texts["today"], this.state.yearIndex, this.state.texts["months"][this.state.monthIndex], this.state.isGregorian, this.state.showPicker);
     
         this.dateSelectorInput.parentElement.appendChild(pickerDiv);
 
@@ -500,6 +513,7 @@ function calendarPicker(settings){
             document.querySelectorAll('#activemonth').forEach(elm => elm.onclick = () => { this.setState("visiblePicker","MONTH"); this.renderPicker(); } ) 
             document.querySelectorAll('#activeyear').forEach(elm => elm.onclick = () => { this.setState("visiblePicker","YEAR"); this.renderPicker(); } ); 
 
+            document.getElementById("todayBtn").onclick = this.onTodaySelected;
 
             document.querySelectorAll('#calendar-type-switcher').forEach(elm => elm.onchange = this.calendarChangeHandler) 
             
@@ -540,9 +554,10 @@ function calendarPicker(settings){
             this.dateSelectorInput.parentElement.tabIndex = 6;
             this.dateSelectorInput.parentElement.focus();
             
-
             this.setState("isGregorian", initialCalendarState);
-            this.setState("today" , curDate);
+
+            this.setState("selectedDate" , curDate);
+            this.setState("today" , today);
             this.setState("monthIndex" , curDate.month);
             this.setState("yearIndex" , curDate.year);
             this.setState("years" , getYears(curDate.year));
@@ -552,9 +567,10 @@ function calendarPicker(settings){
                         getMonthDaysGreg(curDate.month, curDate.year) : 
                         getMonthDaysEthiopic(curDate.month, curDate.year));
             this.setState("visiblePicker","DATE");
+
             if(this.state.showPicker){
                 this.setState("showPicker", !this.state.showPicker);
-            }else{
+            } else{
                 this.state.showPicker = showDatePicker;
             }
         
@@ -584,7 +600,7 @@ function calendarPicker(settings){
 
 
 // the date picker component
-function datePicker(monthIndex, monthDays, today, weekdays){
+function datePicker(monthIndex, monthDays, selectedDate, today, weekdays){
     return `
         <div data-isof-calendar="1"  tabIndex="-1888" class="row  d-flex align-items-center flex-row justify-content-around px-0 p-0p2 f-1p6" >
             ${weekdays.map((day, weekidx) => {
@@ -603,6 +619,7 @@ function datePicker(monthIndex, monthDays, today, weekdays){
             <div data-isof-calendar="1"  tabIndex="-1888" class="d-flex flex-row justify-content-center px-0 pt-1" id="datePickerParent" >
                 ${week.map((day, dayidx) => {
                   const isToday = day.day === today.day && day.month === today.month && day.year === today.year;
+                  const isSelected = day.day === selectedDate.day && day.month === selectedDate.month && day.year === selectedDate.year;
                   return `
                     <div data-isof-calendar="1"  tabIndex="-1888" class="col f-05 d-flex flex-row   justify-content-center">
                       <button
@@ -616,8 +633,8 @@ function datePicker(monthIndex, monthDays, today, weekdays){
                                     font-family: inherit;
                                     font-weight: inherit;
                                     text-transform: none;
-                                    color: ${isToday ? "hsl(0, 0%, 96%)" : (day.month === monthIndex) ? "inherit" : "hsl(240, 4%, 60%)"};
-                                    background-color: ${isToday ? "hsl(214, 82%, 51%)" : "#fff"} ;
+                                    color: ${isToday ? "hsl(0, 0%, 96%)" : isSelected ? "hsl(214, 82%, 51%)" : (day.month === monthIndex) ? "inherit" : "hsl(240, 4%, 60%)"};
+                                    background-color: ${isToday ? "hsl(214, 82%, 51%)" : isSelected ? "hsl(216, 88%, 91%)" : "#fff"} ;
                                     padding: ${day.day >= 10 ? "0.2em 0.42em" : "0.2em 0.68em"}; 
                                     border-radius: 50%;
                                     min-height: 0.8em;
@@ -637,7 +654,7 @@ function datePicker(monthIndex, monthDays, today, weekdays){
     `
 }
 
-function pickerContainer(childComponent,pickerType , year , monthName , isGregorian , showPicker )
+function pickerContainer(childComponent, pickerType, today, year , monthName , isGregorian , showPicker )
 {
 
     return `
@@ -656,13 +673,23 @@ function pickerContainer(childComponent,pickerType , year , monthName , isGregor
                   ${
                         pickerType === "DATE" ? 
                         `    
-                            <div data-isof-calendar="1"  tabIndex="-1888" id="calendarLocalization" class="p-0 d-flex justify-content-end align-items-center my-1 pt-2">
-                                <span data-isof-calendar="1"  tabIndex="-1888" className="p-0  m-0 f-07" > EN </span>
-                                <div data-isof-calendar="1"  tabIndex="-1888" class="form-check form-switch align ms-2 my-0">
-                                    <input data-isof-calendar="1"  tabIndex="-1888" class="form-check-input" type="checkbox" role="switch" id="calendar-type-switcher" ${isGregorian ? ''  : 'checked'}>
+                            <div class="d-flex justify-content-between align-items-center p-0">
+                                <button 
+                                    data-isof-calendar="1"  
+                                    tabIndex="-1888" class="btn btn-outline-primary py-0 border-0 px-2"
+                                    id="todayBtn"
+                                >
+                                    ${today}
+                                </button>
+
+                                <div data-isof-calendar="1"  tabIndex="-1888" id="calendarLocalization" class="p-0 d-flex justify-content-end align-items-center my-1 pt-2">
+                                    <span data-isof-calendar="1"  tabIndex="-1888" className="p-0  m-0 f-07" > EN </span>
+                                    <div data-isof-calendar="1"  tabIndex="-1888" class="form-check form-switch align ms-2 my-0">
+                                        <input data-isof-calendar="1"  tabIndex="-1888" class="form-check-input" type="checkbox" role="switch" id="calendar-type-switcher" ${isGregorian ? ''  : 'checked'}>
+                                    </div>
+                                    <span data-isof-calendar="1"  tabIndex="-1888"  className="p-0 my-0 f-07"> ኢት </span>
                                 </div>
-                                <span data-isof-calendar="1"  tabIndex="-1888"  className="p-0 my-0 f-07"> ኢት </span>
-                            </div>
+                            </div>                            
                         ` : ``
                    }
                   ${
@@ -683,8 +710,6 @@ function pickerContainer(childComponent,pickerType , year , monthName , isGregor
                                         data-isof-calendar="1"  tabIndex="-1888"
                                         id="btnmonthprev"
                                         class="border-0 m-0 p-0 me-3"
-                                        
-                                        
                                     >
                                     <i data-isof-calendar="1"  tabIndex="-1888" class=" bi bi-chevron-left " >
                                     </i>
