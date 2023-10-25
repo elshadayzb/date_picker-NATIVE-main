@@ -312,8 +312,37 @@ function compareMonths(date1, date2, isGregorian){
 }
 
 // compare year1 and year2
-function compareYears(date1, date2, isGregorian){
+function compareYears(year, isGregorian, minDate, maxDate){
 
+    if(!minDate.hasValue && !maxDate.hasValue){
+        console.log("Case 1: Year: ", year, " isGregorian: ", isGregorian, " \nminDate: ", minDate, " \nmaxDate: ", maxDate);
+        return true;
+    } else if(minDate.hasValue && maxDate.hasValue){
+        console.log("Case 2: Year: ", year, " isGregorian: ", isGregorian, " \nminDate: ", minDate, " \nmaxDate: ", maxDate);
+        return isGregorian && (year <= maxDate.gregDate.year && year >= minDate.gregDate.year) ? 
+                    true : 
+                    !isGregorian && (year <= maxDate.ethDate.year && year >= minDate.ethDate.year) ?
+                        true : false;
+            
+        /* if(isGregorian && (year < maxDate.gregDate.year && year > minDate.gregDate.year)){
+            return true;
+        }else if(!isGregorian && (year < maxDate.ethDate.year && year > maxDate.ethDate.year)){
+            return true;
+        }
+        return false; */
+    } else if (minDate.hasValue){
+        console.log("Case 3: Year: ", year, " isGregorian: ", isGregorian, " \nminDate: ", minDate, " \nmaxDate: ", maxDate);
+        return isGregorian && year >= minDate.gregDate.year ?
+                    true :
+                    !isGregorian && year >= minDate.ethDate.year ?
+                        true : false;
+    } else{
+        console.log("Case 4: Year: ", year, " isGregorian: ", isGregorian, " \nminDate: ", minDate, " \nmaxDate: ", maxDate);
+        return isGregorian && year <= maxDate.gregDate.year ?
+                    true :
+                    !isGregorian && year <= maxDate.ethDate.year ?
+                        true : false;
+    }
 }
 
 // the calendar picker component
@@ -328,6 +357,49 @@ function calendarPicker(settings){
     const curDate = this.settings["selectedDate"] ? 
                         {...this.settings["selectedDate"], month: this.settings["selectedDate"].month - 1} : 
                         today; // gets the selectedDate
+
+    let convDate;
+
+    if(minDate && Object.keys(minDate) && (minDate.year && minDate.month && minDate.day)){
+        if(initialCalendarState){
+            convDate = calendarConverter.convertToEC(minDate.year, minDate.month, minDate.day);
+            this.minDate = {
+                hasValue: true,
+                ethDate: {...convDate, month: convDate.month - 1},
+                gregDate: {...minDate, month: minDate.month - 1}
+            }
+        } else{
+            convDate = calendarConverter.convertToGC(minDate.year, minDate.month, minDate.day);
+            this.minDate = {
+                hasValue: true,
+                ethDate: {...minDate, month: minDate.month - 1},
+                gregDate: {...convDate, month: convDate.month - 1}
+            }
+        }
+    } else{
+        this.minDate = { hasValue: false };
+    }
+
+    if(maxDate && Object.keys(maxDate) && (maxDate.year && maxDate.month && maxDate.day)){
+        if(initialCalendarState){
+            convDate = calendarConverter.convertToEC(maxDate.year, maxDate.month, maxDate.day);
+            this.maxDate = {
+                hasValue: true,
+                ethDate: {...convDate, month: convDate.month - 1},
+                gregDate: {...maxDate, month: maxDate.month - 1}
+            }
+        } else{
+            convDate = calendarConverter.convertToGC(maxDate.year, maxDate.month, maxDate.day);
+            this.maxDate = {
+                hasValue: true,
+                ethDate: {...maxDate, month: maxDate.month - 1},
+                gregDate: {...convDate, month: convDate.month - 1}
+            }
+        }
+    } else{
+        this.maxDate = { hasValue: false };
+    }
+    
 
     this.setState = (index,value)=>{
         this.state[index] = value;
@@ -482,26 +554,35 @@ function calendarPicker(settings){
     }
 
     this.renderPicker = () =>{
-       
+    
 
         let pickerComponent;
         if(this.state.visiblePicker === "MONTH"){
             pickerComponent = monthPicker(this.state.texts["months_short"]);
            
         }else if(this.state.visiblePicker === "YEAR"){
-            pickerComponent = yearPicker(this.state.years);
+            //console.log("Min date: ", this.minDate, "\nMax date: ", this.maxDate);
+            pickerComponent = yearPicker(this.state.years, this.state.isGregorian, this.minDate, this.maxDate);
         }else {
             pickerComponent = datePicker(this.state.monthIndex, this.state.monthDays, this.state.selectedDate, this.state.today, this.state.texts["weekdays"]);
         }
-          
-
 
         if(this.dateSelectorInput.parentElement.lastChild)
         this.dateSelectorInput.parentElement.removeChild(this.dateSelectorInput.parentElement.lastChild); 
 
 
         const pickerDiv = document.createElement('div');
-        pickerDiv.innerHTML = pickerContainer(pickerComponent, this.state.visiblePicker, this.state.texts["today"], this.state.yearIndex, this.state.texts["months"][this.state.monthIndex], this.state.isGregorian, this.state.showPicker);
+        pickerDiv.innerHTML = pickerContainer(pickerComponent, 
+                                              this.state.visiblePicker, 
+                                              this.state.texts["today"], 
+                                              this.state.yearIndex, 
+                                              this.state.texts["months"][this.state.monthIndex], 
+                                              this.state.isGregorian, 
+                                              this.state.showPicker,
+                                              this.minDate,
+                                              this.maxDate,
+                                              this.state.years
+                                            );
     
         this.dateSelectorInput.parentElement.appendChild(pickerDiv);
 
@@ -546,9 +627,11 @@ function calendarPicker(settings){
     this.init = () => {
         this.dateSelectorInput = document.getElementById(this.settings.selector);
         if(!this.dateSelectorInput){
-
             return;
         }
+
+        //console.log("Min date: ", this.minDate, "\nMax date: ", this.maxDate);
+
         this.dateSelectorInput.onclick = ()=>{
 
             this.dateSelectorInput.parentElement.tabIndex = 6;
@@ -654,7 +737,7 @@ function datePicker(monthIndex, monthDays, selectedDate, today, weekdays){
     `
 }
 
-function pickerContainer(childComponent, pickerType, today, year , monthName , isGregorian , showPicker )
+function pickerContainer(childComponent, pickerType, today, year , monthName , isGregorian , showPicker, minDate, maxDate, years )
 {
 
     return `
@@ -764,7 +847,7 @@ function pickerContainer(childComponent, pickerType, today, year , monthName , i
                                 <button data-isof-calendar="1"  tabIndex="-1888"
                                     id="btnmonthprev"
                                     class="col-1 border-0 m-0 p-0 me-3" 
-                                    
+                                    ${compareYears(years[0], isGregorian, minDate, {}) ? "" : "disabled"}
                                     
                                 >
                                 <i data-isof-calendar="1"  tabIndex="-1888"  class="f-1p3 bi bi-chevron-left " >
@@ -773,7 +856,7 @@ function pickerContainer(childComponent, pickerType, today, year , monthName , i
                                 <button data-isof-calendar="1"  tabIndex="-1888"
                                     id="btnmonthnext"
                                     class="col-1 border-0 m-0 p-0 me-3"
-                                    
+                                    ${compareYears(years[19], isGregorian, {}, maxDate) ? "" : "disabled"}
                                 >
                                 <i  data-isof-calendar="1"  tabIndex="-1888" class="f-1p3 bi bi-chevron-right" >
                                 </i>
@@ -820,7 +903,9 @@ function monthPicker(months){
 }
 
 // the year picker component
-function yearPicker(years){
+function yearPicker(years, isGregorian, minDate, maxDate){
+    //console.log("Min date: ", minDate, "\nMax date: ", maxDate);
+
     return `
             <div data-isof-calendar="1"  tabIndex="-1888" class="row f-1 row-cols-4 d-flex align-items-between ">
                 ${
@@ -836,9 +921,9 @@ function yearPicker(years){
                                     text-transform: none;
                                     border-radius: 10%;
                                     min-height: 4ch;
-                                    min-width: 8ch;
-
-                                    ">
+                                    min-width: 8ch;"  
+                                    ${compareYears(year, isGregorian, minDate, maxDate)? "" : "disabled"}
+                                >
                                     ${year}
                                 </button>
                         </span>
