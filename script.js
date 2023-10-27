@@ -322,29 +322,18 @@ function toTime(date, isGregorian)
 function compareDates(day ,month, year , isGregorian , minDate , maxDate){
    
     if(!minDate.hasValue && !maxDate.hasValue){
-        console.log("Case 1: day"  , day,  "\nmonth: ", month, "\nyear" , year , "\nisGregorian: ", isGregorian, " \nminDate: ", minDate, " \nmaxDate: ", maxDate);
         return true;
     } else if(minDate.hasValue && maxDate.hasValue){
-        console.log("Case 2: day"  , day,  "\nmonth: ", month, "\nyear" , year , "\nisGregorian: ", isGregorian, " \nminDate: ", minDate, " \nmaxDate: ", maxDate);
         return isGregorian && (toTime(minDate.gregDate,isGregorian) <= toTime({year : year , month : month , day : day},isGregorian)) && (toTime(maxDate.gregDate , isGregorian) >= toTime({year : year , month : month , day : day},isGregorian))  ? 
                     true : 
                     !isGregorian && (toTime(minDate.ethDate,isGregorian) <= toTime({year : year , month : month , day : day},isGregorian)) && (toTime(maxDate.ethDate,isGregorian) >= toTime({year : year , month : month , day : day},isGregorian)) ?
                         true : false;
-
-        /* if(isGregorian && (month < maxDate.gregDate.month && month > minDate.gregDate.month)){
-            return true;
-        }else if(!isGregorian && (month < maxDate.ethDate.month && month > maxDate.ethDate.month)){
-            return true;
-        }
-        return false; */
     } else if (minDate.hasValue){
-        console.log("Case 3: day"  , day,  "\nmonth: ", month, "\nyear" , year , "\nisGregorian: ", isGregorian, " \nminDate: ", minDate, " \nmaxDate: ", maxDate);
         return isGregorian && (toTime(minDate.gregDate ,isGregorian ) <= toTime({year : year , month : month , day : day},isGregorian))  ? 
                     true :
                     !isGregorian && (toTime(minDate.ethDate ,isGregorian) <= toTime({year : year , month : month , day : day},isGregorian)) ?
                         true : false;
     } else if(maxDate.hasValue){
-        console.log("Case 4: day"  , day,  "\nmonth: ", month, "\nyear" , year , "\nisGregorian: ", isGregorian, " \nminDate: ", minDate, " \nmaxDate: ", maxDate);
         return isGregorian && (toTime(maxDate.gregDate,isGregorian) >= toTime({year : year , month : month , day : day},isGregorian))  ?
                     true :
                     !isGregorian && (toTime(maxDate.ethDate,isGregorian) >= toTime({year : year , month : month , day : day},isGregorian))  ?
@@ -467,8 +456,8 @@ function calendarPicker(settings){
         this.setState("isGregorian", !this.state.isGregorian);
         
         if(initialCalendarState === this.state.isGregorian){
-            console.log("Initial Calendar State: ", initialCalendarState, 
-                        " isGregorian: ", this.state.isGregorian, " selectedDate: ", this.settings["selectedDate"], " \nCurrent Date: ", curDate);
+            /* console.log("Initial Calendar State: ", initialCalendarState, 
+                        " isGregorian: ", this.state.isGregorian, " selectedDate: ", this.settings["selectedDate"], " \nCurrent Date: ", curDate); */
             this.setState("selectedDate", curDate);
         }else if(!this.settings["selectedDate"]){
             this.setState("selectedDate", getToday(this.state.isGregorian));        
@@ -528,7 +517,7 @@ function calendarPicker(settings){
         if(this.state.visiblePicker === "MONTH"){
             this.setState("yearIndex",this.state.yearIndex + 1 );
         }else if (this.state.visiblePicker === "YEAR"){
-           
+            console.log("selected year: ", this.state.yearIndex);
             this.setState("yearIndex", this.state.yearIndex + 20 );
             this.setState("years", getYears(this.state.yearIndex));
             
@@ -615,7 +604,6 @@ function calendarPicker(settings){
             pickerComponent = monthPicker(this.state.texts["months_short"], this.state.yearIndex , this.state.isGregorian, this.minDate, this.maxDate );
            
         }else if(this.state.visiblePicker === "YEAR"){
-            //console.log("Min date: ", this.minDate, "\nMax date: ", this.maxDate);
             pickerComponent = yearPicker(this.state.years, this.state.isGregorian, this.minDate, this.maxDate);
         }else {
             pickerComponent = datePicker(this.state.monthIndex, this.state.monthDays, this.state.selectedDate, this.state.today, this.state.texts["weekdays"],this.minDate, this.maxDate , this.state.isGregorian);
@@ -685,8 +673,6 @@ function calendarPicker(settings){
         if(!this.dateSelectorInput){
             return;
         }
-
-        //console.log("Min date: ", this.minDate, "\nMax date: ", this.maxDate);
 
         this.dateSelectorInput.onclick = ()=>{
 
@@ -759,27 +745,29 @@ function datePicker(monthIndex, monthDays, selectedDate, today, weekdays , minDa
                 ${week.map((day, dayidx) => {
                   const isToday = day.day === today.day && day.month === today.month && day.year === today.year;
                   const isSelected = day.day === selectedDate.day && day.month === selectedDate.month && day.year === selectedDate.year;
+                  const show = compareDates(day.day,day.month,day.year, isGregorian, minDate, maxDate);
+                  const btnBackground = isToday ? 'hsl(214, 82%, 51%)' : isSelected ? 'hsl(216, 88%, 91%)' : show ? "#fff" : "#efefef"; 
                   return `
-                    <div data-isof-calendar="1"  tabIndex="-1888" class="col f-05 d-flex flex-row   justify-content-center">
+                    <div data-isof-calendar="1"  tabIndex="-1888" class="col f-05 d-flex flex-row justify-content-center">
                       <button
                         id=${weekidx}${dayidx}
                         data-selected-date=${btoa(JSON.stringify(day))}
                         data-isof-calendar="1"  tabIndex="-1888"
                         class="day-of-month border-0 text-center"
-                        onmouseenter="this.style.backgroundColor='#e8eaed'"
-                        onmouseleave="this.style.backgroundColor='#fff'"
+                        onmouseenter=${isToday ? "this.style.backgroundColor='hsl(214, 82%, 51%)'" : show ? "this.style.backgroundColor='#e8eaed'" : "this.style.backgroundColor='#efefef'"}
+                        onmouseleave=${isToday ? "this.style.backgroundColor='hsl(214, 82%, 51%)'" : show ? "this.style.backgroundColor='#fff'" : "this.style.backgroundColor='#efefef'"}
                         style="font-size: inherit;
                                     font-family: inherit;
                                     font-weight: inherit;
                                     text-transform: none;
-                                    color: ${isToday ? "hsl(0, 0%, 96%)" : isSelected ? "hsl(214, 82%, 51%)" : (day.month === monthIndex) ? "inherit" : "hsl(240, 4%, 60%)"};
-                                    background-color: ${isToday ? "hsl(214, 82%, 51%)" : isSelected ? "hsl(216, 88%, 91%)" : "#fff"} ;
+                                    color: ${isToday ? "hsl(0, 0%, 96%)" : isSelected ? "hsl(214, 82%, 51%)" : show ? (day.month === monthIndex) ? "inherit" : "hsl(240, 4%, 60%)" : "hsl(250, 4%, 80%)"};
+                                    background-color: ${isToday ? "hsl(214, 82%, 51%)" : isSelected ? "hsl(216, 88%, 91%)" : show ? "#fff" : "#efefef"} ;
                                     padding: ${day.day >= 10 ? "0.2em 0.42em" : "0.2em 0.68em"}; 
                                     border-radius: 50%;
                                     min-height: 0.8em;
                                     min-width: 0.8em;
                                     "
-                        ${compareDates(day.day,day.month,day.year, isGregorian, minDate, maxDate) ? "" : "disabled"}
+                        ${show ? "" : "disabled"}
                       >
                         ${day.day}
                       </button>
@@ -964,7 +952,6 @@ function monthPicker(months, year ,isGregorian, minDate, maxDate){
 
 // the year picker component
 function yearPicker(years, isGregorian, minDate, maxDate){
-    //console.log("Min date: ", minDate, "\nMax date: ", maxDate);
 
     return `
             <div data-isof-calendar="1"  tabIndex="-1888" class="row f-1 row-cols-4 d-flex align-items-between ">
