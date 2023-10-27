@@ -20,13 +20,13 @@
     color: aquamarine;
 }
 
-.bi:hover
+/* .bi:hover
 {
     background-color: hsl(214, 82%, 51%);
     color: #ffffff;
     border-radius: 50%;
     padding: 0.1em 0.3em;
-}
+} */
 .day-of-month:hover
 {
     background-color: #b7b7b7;

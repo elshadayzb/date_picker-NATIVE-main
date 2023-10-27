@@ -312,36 +312,38 @@ function compareMonths(date1, date2, isGregorian){
 }
 
 // compare year1 and year2
-function compareYears(year, isGregorian, minDate, maxDate){
+function compareYears(year, isGregorian, minDate, maxDate , isNav = false){
 
     if(!minDate.hasValue && !maxDate.hasValue){
-        console.log("Case 1: Year: ", year, " isGregorian: ", isGregorian, " \nminDate: ", minDate, " \nmaxDate: ", maxDate);
+        console.log("Case 1: Year: ", year, " isGregorian: ", isGregorian, " \nminDate: ", minDate, " \nmaxDate: ", maxDate, " nav: ", !isNav);
         return true;
     } else if(minDate.hasValue && maxDate.hasValue){
-        console.log("Case 2: Year: ", year, " isGregorian: ", isGregorian, " \nminDate: ", minDate, " \nmaxDate: ", maxDate);
+        console.log("Case 2: Year: ", year, " isGregorian: ", isGregorian, " \nminDate: ", minDate, " \nmaxDate: ", maxDate, " nav: ", !isNav);
         return isGregorian && (year <= maxDate.gregDate.year && year >= minDate.gregDate.year) ? 
                     true : 
                     !isGregorian && (year <= maxDate.ethDate.year && year >= minDate.ethDate.year) ?
                         true : false;
-            
-        /* if(isGregorian && (year < maxDate.gregDate.year && year > minDate.gregDate.year)){
-            return true;
-        }else if(!isGregorian && (year < maxDate.ethDate.year && year > maxDate.ethDate.year)){
-            return true;
-        }
-        return false; */
+                        /* !isNav && ((isGregorian && (year === maxDate.gregDate.year && year === minDate.gregDate.year)) ||
+                        (!isGregorian && (year === maxDate.ethDate.year && year === minDate.ethDate.year))) ?
+                            true : false */
     } else if (minDate.hasValue){
-        console.log("Case 3: Year: ", year, " isGregorian: ", isGregorian, " \nminDate: ", minDate, " \nmaxDate: ", maxDate);
+        console.log("Case 3: Year: ", year, " isGregorian: ", isGregorian, " \nminDate: ", minDate, " \nmaxDate: ", maxDate, " nav: ", !isNav);
         return isGregorian && year >= minDate.gregDate.year ?
                     true :
                     !isGregorian && year >= minDate.ethDate.year ?
                         true : false;
+                        /* !isNav && ((isGregorian && (year === minDate.gregDate.year)) ||
+                        (!isGregorian && (year === minDate.ethDate.year))) ?
+                            true : false; */
     } else{
-        console.log("Case 4: Year: ", year, " isGregorian: ", isGregorian, " \nminDate: ", minDate, " \nmaxDate: ", maxDate);
+        console.log("Case 4: Year: ", year, " isGregorian: ", isGregorian, " \nminDate: ", minDate, " \nmaxDate: ", maxDate, "", maxDate, " nav: ", !isNav);
         return isGregorian && year <= maxDate.gregDate.year ?
                     true :
                     !isGregorian && year <= maxDate.ethDate.year ?
                         true : false;
+                        /* !isNav && ((isGregorian && (year === maxDate.gregDate.year)) ||
+                        (!isGregorian && (year === maxDate.ethDate.year))) ?
+                            true : false; */                        
     }
 }
 
@@ -847,7 +849,7 @@ function pickerContainer(childComponent, pickerType, today, year , monthName , i
                                 <button data-isof-calendar="1"  tabIndex="-1888"
                                     id="btnmonthprev"
                                     class="col-1 border-0 m-0 p-0 me-3" 
-                                    ${compareYears(years[0], isGregorian, minDate, {}) ? "" : "disabled"}
+                                    ${compareYears(years[0] - 1, isGregorian, minDate, {}, true) ? "" : "disabled"}
                                     
                                 >
                                 <i data-isof-calendar="1"  tabIndex="-1888"  class="f-1p3 bi bi-chevron-left " >
@@ -856,7 +858,7 @@ function pickerContainer(childComponent, pickerType, today, year , monthName , i
                                 <button data-isof-calendar="1"  tabIndex="-1888"
                                     id="btnmonthnext"
                                     class="col-1 border-0 m-0 p-0 me-3"
-                                    ${compareYears(years[19], isGregorian, {}, maxDate) ? "" : "disabled"}
+                                    ${compareYears(years[19] + 1, isGregorian, {}, maxDate, true) ? "" : "disabled"}
                                 >
                                 <i  data-isof-calendar="1"  tabIndex="-1888" class="f-1p3 bi bi-chevron-right" >
                                 </i>
@@ -922,7 +924,7 @@ function yearPicker(years, isGregorian, minDate, maxDate){
                                     border-radius: 10%;
                                     min-height: 4ch;
                                     min-width: 8ch;"  
-                                    ${compareYears(year, isGregorian, minDate, maxDate)? "" : "disabled"}
+                                    ${compareYears(year, isGregorian, minDate, maxDate, false)? "" : "disabled"}
                                 >
                                     ${year}
                                 </button>
