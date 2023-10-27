@@ -306,6 +306,7 @@ function toTime(date, isGregorian)
     if( Object.keys(date).length > 0 && ( typeof(date.year) === "number"  && typeof(date.month) === "number"  && typeof(date.day) === "number" )  && (date.year >= 0 && date.month >= 0 && date.day >= 0) )
     {
         if(!isGregorian){
+            
             let convertedDate = calendarConverter.convertToGC(date.year, date.month + 1, date.day);
             return new Date(convertedDate.year, convertedDate.month - 1, convertedDate.day).getTime();
         }
@@ -325,9 +326,9 @@ function compareDates(day ,month, year , isGregorian , minDate , maxDate){
         return true;
     } else if(minDate.hasValue && maxDate.hasValue){
         console.log("Case 2: day"  , day,  "\nmonth: ", month, "\nyear" , year , "\nisGregorian: ", isGregorian, " \nminDate: ", minDate, " \nmaxDate: ", maxDate);
-        return isGregorian && (toTime(minDate.gregDate) <= toTime({year : year , month : month , day : day})) && (toTime(maxDate.gregDate) >= toTime({year : year , month : month , day : day}))  ? 
+        return isGregorian && (toTime(minDate.gregDate,isGregorian) <= toTime({year : year , month : month , day : day},isGregorian)) && (toTime(maxDate.gregDate , isGregorian) >= toTime({year : year , month : month , day : day},isGregorian))  ? 
                     true : 
-                    !isGregorian && (toTime(minDate.ethDate) <= toTime({year : year , month : month , day : day})) && (toTime(maxDate.ethDate) >= toTime({year : year , month : month , day : day})) ?
+                    !isGregorian && (toTime(minDate.ethDate,isGregorian) <= toTime({year : year , month : month , day : day},isGregorian)) && (toTime(maxDate.ethDate,isGregorian) >= toTime({year : year , month : month , day : day},isGregorian)) ?
                         true : false;
 
         /* if(isGregorian && (month < maxDate.gregDate.month && month > minDate.gregDate.month)){
@@ -338,15 +339,15 @@ function compareDates(day ,month, year , isGregorian , minDate , maxDate){
         return false; */
     } else if (minDate.hasValue){
         console.log("Case 3: day"  , day,  "\nmonth: ", month, "\nyear" , year , "\nisGregorian: ", isGregorian, " \nminDate: ", minDate, " \nmaxDate: ", maxDate);
-        return isGregorian && (toTime(minDate.gregDate) <= toTime({year : year , month : month , day : day}))  ? 
+        return isGregorian && (toTime(minDate.gregDate ,isGregorian ) <= toTime({year : year , month : month , day : day},isGregorian))  ? 
                     true :
-                    !isGregorian && (toTime(minDate.ethDate) <= toTime({year : year , month : month , day : day})) ?
+                    !isGregorian && (toTime(minDate.ethDate ,isGregorian) <= toTime({year : year , month : month , day : day},isGregorian)) ?
                         true : false;
     } else if(maxDate.hasValue){
         console.log("Case 4: day"  , day,  "\nmonth: ", month, "\nyear" , year , "\nisGregorian: ", isGregorian, " \nminDate: ", minDate, " \nmaxDate: ", maxDate);
-        return isGregorian && (toTime(maxDate.gregDate) >= toTime({year : year , month : month , day : day}))  ?
+        return isGregorian && (toTime(maxDate.gregDate,isGregorian) >= toTime({year : year , month : month , day : day},isGregorian))  ?
                     true :
-                    !isGregorian && (toTime(maxDate.ethDate) >= toTime({year : year , month : month , day : day}))  ?
+                    !isGregorian && (toTime(maxDate.ethDate,isGregorian) >= toTime({year : year , month : month , day : day},isGregorian))  ?
                         true : false;
     }
 
@@ -849,7 +850,7 @@ function pickerContainer(childComponent, pickerType, today, year , month , month
                                         data-isof-calendar="1"  tabIndex="-1888"
                                         id="btnmonthprev"
                                         class="border-0 m-0 p-0 me-3"
-                                        ${compareDates(monthDays[0][0].day,month,year, isGregorian, minDate, {}) ? "" : "disabled"}
+                                        ${compareDates(monthDays[0][0].day,monthDays[0][0].month,monthDays[0][0].year, isGregorian, minDate, {}) ? "" : "disabled"}
                                     >
                                     <i data-isof-calendar="1"  tabIndex="-1888" class=" bi bi-chevron-left " >
                                     </i>
@@ -858,7 +859,7 @@ function pickerContainer(childComponent, pickerType, today, year , month , month
                                         data-isof-calendar="1"  tabIndex="-1888"
                                         id="btnmonthnext"
                                         class="border-0 m-0 p-0 me-1"
-                                        ${compareDates(monthDays[5][6].day,month,year, isGregorian, {},maxDate) ? "" : "disabled"}
+                                        ${compareDates(monthDays[5][6].day,monthDays[5][6].month,monthDays[5][6].year, isGregorian, {},maxDate) ? "" : "disabled"}
                                     >
                                     <i data-isof-calendar="1"  tabIndex="-1888" class=" bi bi-chevron-right" >
                                     </i>
