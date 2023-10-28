@@ -755,8 +755,8 @@ function datePicker(monthIndex, monthDays, selectedDate, today, weekdays , minDa
                         data-selected-date=${btoa(JSON.stringify(day))}
                         data-isof-calendar="1"  tabIndex="-1888"
                         class="day-of-month border-0 text-center"
-                        onmouseenter= ${isToday ? "this.style.backgroundColor='#1C74E9'" : isSelected ? '#D4E4FC' : show ? "this.style.backgroundColor='#e8eaed'" : "this.style.backgroundColor='#efefef'"}                        
-                        onmouseleave= ${isToday ? "this.style.backgroundColor='#1C74E9'" : isSelected ? '#D4E4FC' : show ? "this.style.backgroundColor='#fff'" : "this.style.backgroundColor='#efefef'"}
+                        onmouseenter= ${isToday ? "this.style.backgroundColor='#1C74E9'" : isSelected ? "this.style.backgroundColor='#D4E4FC'" : show ? "this.style.backgroundColor='#e8eaed'" : "this.style.backgroundColor='#efefef'"}                        
+                        onmouseleave= ${isToday ? "this.style.backgroundColor='#1C74E9'" : isSelected ? "this.style.backgroundColor='#D4E4FC'" : show ? "this.style.backgroundColor='#fff'" : "this.style.backgroundColor='#efefef'"}
                         style="font-size: inherit;
                                     font-family: inherit;
                                     font-weight: inherit;
