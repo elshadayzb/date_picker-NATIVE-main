@@ -721,8 +721,8 @@ function calendarPicker(settings){
     return;
 }
 
-
-
+//Enter ${isToday ? "this.style.backgroundColor='hsl(214, 82%, 51%)'" : show ? "this.style.backgroundColor='#e8eaed'" : "this.style.backgroundColor='#efefef'"}
+//Leave : ${isToday ? "this.style.backgroundColor='hsl(214, 82%, 51%)'" : show ? "this.style.backgroundColor='#fff'" : "this.style.backgroundColor='#efefef'"}
 
 // the date picker component
 function datePicker(monthIndex, monthDays, selectedDate, today, weekdays , minDate, maxDate , isGregorian){
@@ -746,7 +746,8 @@ function datePicker(monthIndex, monthDays, selectedDate, today, weekdays , minDa
                   const isToday = day.day === today.day && day.month === today.month && day.year === today.year;
                   const isSelected = day.day === selectedDate.day && day.month === selectedDate.month && day.year === selectedDate.year;
                   const show = compareDates(day.day,day.month,day.year, isGregorian, minDate, maxDate);
-                  const btnBackground = isToday ? 'hsl(214, 82%, 51%)' : isSelected ? 'hsl(216, 88%, 91%)' : show ? "#fff" : "#efefef"; 
+                  const btnBackgroundLeave = isToday ? '#1C74E9' : isSelected ? '#D4E4FC' : show ? "#fff" : "#efefef"; 
+                  //const btnBackgroundEnter = isToday ? '#1C74E9' : isSelected ? '#D4E4FC' : show ? "#e8eaed" : "#efefef"; 
                   return `
                     <div data-isof-calendar="1"  tabIndex="-1888" class="col f-05 d-flex flex-row justify-content-center">
                       <button
@@ -754,14 +755,14 @@ function datePicker(monthIndex, monthDays, selectedDate, today, weekdays , minDa
                         data-selected-date=${btoa(JSON.stringify(day))}
                         data-isof-calendar="1"  tabIndex="-1888"
                         class="day-of-month border-0 text-center"
-                        onmouseenter=${isToday ? "this.style.backgroundColor='hsl(214, 82%, 51%)'" : show ? "this.style.backgroundColor='#e8eaed'" : "this.style.backgroundColor='#efefef'"}
-                        onmouseleave=${isToday ? "this.style.backgroundColor='hsl(214, 82%, 51%)'" : show ? "this.style.backgroundColor='#fff'" : "this.style.backgroundColor='#efefef'"}
+                        onmouseenter= ${isToday ? "this.style.backgroundColor='#1C74E9'" : isSelected ? '#D4E4FC' : show ? "this.style.backgroundColor='#e8eaed'" : "this.style.backgroundColor='#efefef'"}                        
+                        onmouseleave= ${isToday ? "this.style.backgroundColor='#1C74E9'" : isSelected ? '#D4E4FC' : show ? "this.style.backgroundColor='#fff'" : "this.style.backgroundColor='#efefef'"}
                         style="font-size: inherit;
                                     font-family: inherit;
                                     font-weight: inherit;
                                     text-transform: none;
-                                    color: ${isToday ? "hsl(0, 0%, 96%)" : isSelected ? "hsl(214, 82%, 51%)" : show ? (day.month === monthIndex) ? "inherit" : "hsl(240, 4%, 60%)" : "hsl(250, 4%, 80%)"};
-                                    background-color: ${isToday ? "hsl(214, 82%, 51%)" : isSelected ? "hsl(216, 88%, 91%)" : show ? "#fff" : "#efefef"} ;
+                                    color: ${isToday ? "#F5F5F5" : isSelected ? "#1C74E9" : show ? (day.month === monthIndex) ? "inherit" : "#95959D" : "#CBCACE"};
+                                    background-color: ${btnBackgroundLeave} ;
                                     padding: ${day.day >= 10 ? "0.2em 0.42em" : "0.2em 0.68em"}; 
                                     border-radius: 50%;
                                     min-height: 0.8em;
@@ -930,7 +931,7 @@ function monthPicker(months, year ,isGregorian, minDate, maxDate){
                     return `
                         <span  data-isof-calendar="1"  tabIndex="-1888" class="col d-flex justify-content-center mt-1">
                                 <button data-isof-calendar="1"  tabIndex="-1888" data-selected-month=${btoa(monthIdx)}
-                                        class="month-of-year btn my-0 p-1 border-0"
+                                        class="month-of-year btn my-0 p-1 border-0 "
                                         style="font-size: inherit;
                                         font-family: inherit;
                                         font-weight: inherit;
