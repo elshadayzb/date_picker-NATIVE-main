@@ -45,16 +45,20 @@
       }
       var dateInput1 = new calendarPicker({"defaultCalendar": "ET", "selector": "date-input", "showDatePicker": true, "dateFormat": "dd-mm-yyyy",'onChangeCallback':getSelectDate});
       dateInput1.init();
-      var dateInput2 = new calendarPicker({"defaultCalendar": "ET", 
+      dateInput1 = undefined;
+      var dateInput2 = new calendarPicker({"defaultCalendar": "GR",//"ET",//"GR", 
                                            "selector": "date-input2", 
                                            "showDatePicker": true, 
                                            "dateFormat": "dd-mm-yyyy",
                                            'onChangeCallback':getSelectDate, 
-                                           "selectedDate": {year: 2021, month: 2, day: 30},
-                                           "minDate": {year: 2009, month: 13, day: 5},
-                                           "maxDate": {year: 2022, month: 2, day: 3}
+                                           "selectedDate": {year: 2021, month: 2, day: 25},
+                                           //"minDate": {year: 2010, month: 2, day: 30},
+                                           //"minDate": {year: 2003, month: 1, day: 1},
+                                           //"maxDate": {year: 2016, month: 2, day: 19},
+                                           "maxDate": {year: 2023, month: 10, day: 30}
                                           });
       dateInput2.init();
+      dateInput2 = undefined;
     </script>
 </body>
 </html>

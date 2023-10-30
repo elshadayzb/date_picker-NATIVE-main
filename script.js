@@ -83,6 +83,10 @@ const TEXTS = [
 const JD_EPOCH_OFFSET_AMETE_ALEM = -285019;
 const JD_EPOCH_OFFSET_AMETE_MIHRET = 1723856;
 const JD_EPOCH_OFFSET_UNSET = -1;
+// Gregorian months day count
+const GREGMONTHSDAYS = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+// Ethiopian months day count
+const ETHMONTHSDAYS = [30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 5];
 
 class CalendarConverter {
     _jdOffset = JD_EPOCH_OFFSET_UNSET;
@@ -247,7 +251,7 @@ class CalendarConverter {
 
     // takes Ethiopian date and returns an equivalent Gregorian date
     convertToGC(year, month, day){
-        if(day < 0 || day > 30 || month < 0 || month > 13){
+        if(month < 0 || month > 13 || day < 0 || day > 30){
             throw new Error("Invalid Ethiopian Date.");
         }
         if((day > 5 && month === 13) && !(this._isEthiopicLeap(year))){
@@ -259,12 +263,12 @@ class CalendarConverter {
 
     // takes Gregorian date and returns an equivalent Ethiopian date
     convertToEC(year, month, day){
-        if(day < 0 || day > 31 || month < 0 || month > 12){
+        if((month === 2 && day > 28) && !(this._isGregorianLeap(year))){
+            throw new Error("The year is not a leap year")
+        }else if(month < 0 || month > 12 || day < 0 || day > GREGMONTHSDAYS[month - 1]){
             throw new Error("Invalid Gregorian Date.");
         }
-        if((day > 28 && month === 2) && !(this._isGregorianLeap(year))){
-            throw new Error("The year is not a leap year")
-        }
+
         const etDate = this._gregorianToEthiopic(year, month, day);
         return {year: etDate[0], month: etDate[1], day: etDate[2]}
     }
@@ -517,7 +521,6 @@ function calendarPicker(settings){
         if(this.state.visiblePicker === "MONTH"){
             this.setState("yearIndex",this.state.yearIndex + 1 );
         }else if (this.state.visiblePicker === "YEAR"){
-            console.log("selected year: ", this.state.yearIndex);
             this.setState("yearIndex", this.state.yearIndex + 20 );
             this.setState("years", getYears(this.state.yearIndex));
             
