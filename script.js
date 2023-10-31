@@ -589,6 +589,7 @@ function calendarPicker(settings){
     }
 
     this.onTodaySelected = () => {
+        //console.log("Today Button clicked.... ", this.state.today, " isGregorian", this.state.isGregorian);
         this.setState("monthIndex" , this.state.today.month);
         this.setState("yearIndex" , this.state.today.year);
         this.setState("years" , getYears(this.state.today.year));
@@ -641,7 +642,7 @@ function calendarPicker(settings){
             document.querySelectorAll('#activemonth').forEach(elm => elm.onclick = () => { this.setState("visiblePicker","MONTH"); this.renderPicker(); } ) 
             document.querySelectorAll('#activeyear').forEach(elm => elm.onclick = () => { this.setState("visiblePicker","YEAR"); this.renderPicker(); } ); 
 
-            document.getElementById("todayBtn").onclick = this.onTodaySelected;
+            document.querySelectorAll('#btn-today').forEach(elm => elm.onclick = this.onTodaySelected);
 
             document.querySelectorAll('#calendar-type-switcher').forEach(elm => elm.onchange = this.calendarChangeHandler) 
             
@@ -805,11 +806,11 @@ function pickerContainer(childComponent, pickerType, today, year , month , month
                   ${
                         pickerType === "DATE" ? 
                         `    
-                            <div class="d-flex justify-content-between align-items-center p-0">
+                            <div class="d-flex justify-content-between align-items-center p-0" id="calendarHeader">
                                 <button 
                                     data-isof-calendar="1"  
                                     tabIndex="-1888" class="btn btn-outline-primary py-0 border-0 px-2"
-                                    id="todayBtn"
+                                    id="btn-today"
                                 >
                                     ${today}
                                 </button>
