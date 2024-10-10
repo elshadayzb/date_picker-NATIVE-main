@@ -38,7 +38,8 @@
       </div>
     
 
-    <script src="./script.js" ></script>
+    <!-- <script src="./script.js" ></script> -->
+    <script src="./script.js"></script>
     <script>
         function getSelectDate(param){
         console.log('Picker Output', param);
@@ -50,12 +51,13 @@
                                            "selector": "date-input2", 
                                            "showDatePicker": true, 
                                            "dateFormat": "dd-mm-yyyy",
-                                           'onChangeCallback':getSelectDate, 
+                                           'onChangeCallback': getSelectDate, 
                                            "selectedDate": {year: 2021, month: 2, day: 25},
                                            //"minDate": {year: 2010, month: 2, day: 30},
                                            "minDate": {year: 1950, month: 1, day: 1},
                                            //"maxDate": {year: 2016, month: 2, day: 19},
-                                           "maxDate": {year: 2023, month: 10, day: 30}
+                                           "maxDate": {year: 2023, month: 10, day: 30},
+                                           "isInputGregorian": true
                                           });
       dateInput2.init();
       dateInput2 = undefined;
