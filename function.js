@@ -264,3 +264,59 @@ function GRDateConverter(ethioYear , ethioMonth , ethioDay)
 
         return converter.convertToGC(ethioYear,ethioMonth,ethioDay);
 }
+
+/* get a day in different time zones from UTC +00 date */
+function getTimezoneDay(day, timezone){
+    const convertedDate = new Date(day.getTime() + (3600000 * timezone));
+    return convertedDate;
+}
+
+// converts event time to preferred time zone
+function convertEventTime(eventTime, timezone){
+    const convertedDate =  getTimezoneDay(new Date(
+                                eventTime.year, 
+                                eventTime.month,
+                                eventTime.day,
+                                eventTime.hour,
+                                eventTime.minute), timezone);
+    return {
+        day: convertedDate.getDate(),
+        month: convertedDate.getMonth(),
+        year: convertedDate.getFullYear(),
+        hour: convertedDate.getHours(),
+        minute: convertedDate.getMinutes()
+    }
+}
+
+// converts ethiopian to gmt+3 international time zone and vice versa
+function convertDateTime(input, isLocal = true){
+    const calendarConverter = new CalendarConverter();
+    let output;
+    let convertedDate
+    if(isLocal){
+        // convert from Ethiopian to GMT+3
+        if(!input.day){
+            output = convertEventTime({day: 1, month: 0, year: 2000, hour: input.hour, minute: input.minute}, 6);
+            return {hour: output.hour, minute: output.minute};
+        } else {
+            output = convertEventTime({...input, month: input.month - 1}, 6);
+            convertedDate = calendarConverter.convertToGC(output.year, output.month + 1, output.day);
+            return {...output, day: convertedDate.day, month: convertedDate.month, year: convertedDate.year};
+        }
+        
+    } else{
+        // convert from GMT+3 to Ethiopian
+        if(!input.day){
+            output = convertEventTime({day: 1, month: 0, year: 2000, hour: input.hour, minute: input.minute}, -6);
+            return {hour: output.hour, minute: output.minute};
+        } else {
+            output = convertEventTime({...input, month: input.month - 1}, -6);
+            convertedDate = calendarConverter.convertToEC(output.year, output.month + 1, output.day);
+            return {...output, day: convertedDate.day, month: convertedDate.month, year: convertedDate.year};
+        }
+        
+    }
+    
+}
+
+console.log(convertDateTime({day: 20, month: 6, year: 2025, hour: 3, minute: 58}, false));
